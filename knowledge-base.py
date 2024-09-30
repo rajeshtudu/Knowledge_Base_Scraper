@@ -68,8 +68,18 @@ def convert_to_markdown(html_content):
     # Iterate through all elements in the body, preserving sequence
     for element in body_content.descendants:
         if element.name in ['h1', 'h2', 'h3', 'h4', 'p', 'div']:  # Include divs and other content containers
-            if element.get('class') in (["testimonials"], ["comments"], ["nav"], ["footer"]):  # Skip unwanted classes
+            # Skip unwanted classes
+            if element.get('class') in (["testimonials"], ["comments"], ["nav"], ["footer"]):
                 continue
+            
+            # Check if there is a div inside the heading tags (h1, h2, h3, h4)
+            if element.name in ['h1', 'h2', 'h3', 'h4']:
+                # If the heading contains divs, include their content
+                divs_inside = element.find_all('div')
+                if divs_inside:
+                    for div in divs_inside:
+                        content += str(div)
+            
             content += str(element)
 
     # Convert the selected HTML content to Markdown
