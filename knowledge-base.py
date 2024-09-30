@@ -68,19 +68,23 @@ def convert_to_markdown(html_content):
     # Iterate through all elements in the body, preserving sequence
     for element in body_content.descendants:
     # Skip footer, nav, aside tags, and unwanted classes
-        if element.name in ['h1', 'h2', 'h3', 'h4', 'p']:  # Include heading tags and paragraph
+        if element.name in ['h1', 'h2', 'h3', 'h4']:  # Focus on heading tags
             if element.get('class') in (["testimonials"], ["comments"], ["nav"], ["footer"]):  # Skip unwanted classes
                 continue
 
-            # Add the heading content to your content variable
+            # Add the heading content to your variable
             content += str(element)
 
-            # Check if there are list tags (ul or ol) directly following the heading tag
-            next_sibling = element.find_next_sibling(['ul', 'ol'])
-            while next_sibling:
-                if next_sibling.name in ['ul', 'ol']:
-                    content += str(next_sibling)
-                next_sibling = next_sibling.find_next_sibling(['ul', 'ol'])
+            # Get the next sibling of the heading and loop until you find another heading or unrelated content
+            next_element = element.find_next_sibling()
+
+            while next_element and next_element.name not in ['h1', 'h2', 'h3', 'h4']:
+                # If it's a paragraph or list, include it in the content
+                if next_element.name in ['p', 'ul', 'ol']:
+                    content += str(next_element)
+
+                # Move to the next sibling
+                next_element = next_element.find_next_sibling()
 
     # Convert the selected HTML content to Markdown
     if content:
