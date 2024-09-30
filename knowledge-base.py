@@ -68,10 +68,8 @@ def convert_to_markdown(html_content):
     # Iterate through all elements in the body, preserving sequence
     for element in body_content.descendants:
         # Skip footer, nav, aside tags, and unwanted classes
-        if element.name in ['h1', 'h2', 'h3', 'h4', 'p']:  # Include divs and other content containers
+        if element.name in ['h1', 'h2', 'h3', 'h4', 'p', 'li']:  # Include divs and other content containers
             if element.get('class') in (["testimonials"], ["comments"], ["nav"], ["footer"]):  # Skip unwanted classes
-                continue
-            if element.name in ['footer', 'nav', 'aside']:  # Skip footer, nav, and aside tags
                 continue
             content += str(element)
 
